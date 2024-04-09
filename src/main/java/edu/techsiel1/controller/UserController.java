@@ -2,11 +2,13 @@ package edu.techsiel1.controller;
 
 import edu.techsiel1.entity.User;
 import edu.techsiel1.service.UserService;
+import edu.techsiel1.service.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/user")
@@ -22,11 +24,13 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public User addUser(@RequestBody User user) {
-        String encodedPassword = passwordEncoder.encode(user.getUserPassword());
-        user.setUserPassword(encodedPassword);
-        return userService.create(user);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        try {
+            User newUser = userService.create(user);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @DeleteMapping("/{userId}")
