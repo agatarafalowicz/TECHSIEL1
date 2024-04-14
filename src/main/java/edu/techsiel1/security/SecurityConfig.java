@@ -3,8 +3,6 @@ package edu.techsiel1.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,8 +28,9 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/login").permitAll() // kazdy moze do tego wejsc
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("api/user/**").hasRole("ADMIN")
+                                .requestMatchers("api/book/add").hasRole("ADMIN")
                                 .requestMatchers("/api/**").authenticated())
                 .build();
     }

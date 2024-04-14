@@ -1,9 +1,16 @@
 package edu.techsiel1.service;
 
 import edu.techsiel1.entity.Book;
+import edu.techsiel1.entity.User;
 import edu.techsiel1.repository.BookRepository;
+import edu.techsiel1.service.exception.BookAlreadyExistsException;
+import edu.techsiel1.service.exception.BookNotFoundException;
+import edu.techsiel1.service.exception.UserAlreadyExistsException;
+import edu.techsiel1.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -18,10 +25,32 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book getOne(Integer bookId){
-        return bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
+    public Book getOne(Integer bookId) {
+        if (bookId == null || bookId <= 0) {
+            throw new IllegalArgumentException("Invalid book ID. Book ID must be a positive integer.");
+        }
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFoundException(String.format("Book with id '%s' not found", bookId)));
     }
 
-    public Book create(Book book){return bookRepository.save(book);}
+    public Book create(Book book) {
+        Integer id = book.getBookId();
+        Optional<Book> existingBook = bookRepository.findById(id);
+        if (existingBook.isPresent()) {
+            throw new BookAlreadyExistsException(String.format("Book with id '%s' already exists", id));
+        } else {
+            return bookRepository.save(book);
+        }
+    }
+
+    public void delete(Integer bookId) {
+        if (bookId == null || bookId <= 0) {
+            throw new IllegalArgumentException("Invalid book ID. Book ID must be a positive integer.");
+        }
+        if (!bookRepository.existsById(bookId)) {
+            throw new UserNotFoundException(String.format("User with id '%s' not found", bookId));
+        }
+        bookRepository.deleteById(bookId);
+    }
 
 }

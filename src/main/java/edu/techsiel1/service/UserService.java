@@ -3,6 +3,7 @@ package edu.techsiel1.service;
 import edu.techsiel1.entity.User;
 import edu.techsiel1.repository.UserRepository;
 import edu.techsiel1.service.exception.UserAlreadyExistsException;
+import edu.techsiel1.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,11 @@ public class UserService {
     }
 
     public User getOne(Integer userId) {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("Invalid user ID. User ID must be a positive integer.");
+        }
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException(String.format("User with id '%s' not found", userId)));
     }
 
     public User create(User user) {
@@ -38,6 +42,12 @@ public class UserService {
     }
 
     public void delete(Integer userId) {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("Invalid user ID. User ID must be a positive integer.");
+        }
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException(String.format("User with id '%s' not found", userId));
+        }
         userRepository.deleteById(userId);
     }
 }
