@@ -62,23 +62,25 @@ public class LoanService {
      */
     public Loan create(Loan loan) {
         String loanDateStr = loan.getLoanDate();
-        String returnDateStr = loan.getReturnDate();
         String dueDateStr = loan.getDueDate();
-        if (loanDateStr == null || returnDateStr == null || dueDateStr == null) {
-            throw new IllegalArgumentException("Loan, return, and due date are required.");
+        if (loanDateStr == null || dueDateStr == null) {
+            throw new IllegalArgumentException("Loan and due date are required.");
         }
         LocalDate loanDate;
         LocalDate returnDate;
         LocalDate dueDate;
         try {
             loanDate = LocalDate.parse(loanDateStr);
-            returnDate = LocalDate.parse(returnDateStr);
             dueDate = LocalDate.parse(dueDateStr);
+            if (loan.getReturnDate() != null){
+                String returnDateStr = loan.getReturnDate();
+                returnDate = LocalDate.parse(returnDateStr);
+                if (returnDate.isBefore(loanDate)) {
+                    throw new IllegalArgumentException("Return date cannot be before loan date.");
+                }
+            }
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date format. Please provide dates in yyyy-MM-dd format.");
-        }
-        if (returnDate.isBefore(loanDate)) {
-            throw new IllegalArgumentException("Return date cannot be before loan date.");
         }
         if (dueDate.isBefore(loanDate)) {
             throw new IllegalArgumentException("Due date cannot be before loan date.");

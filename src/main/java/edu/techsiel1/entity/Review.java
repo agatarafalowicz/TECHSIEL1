@@ -141,4 +141,29 @@ public class Review {
     public void setDate(String date) {
         this.date = date;
     }
+
+    /**
+     * Creates a new review entity associated with a specific book.
+     *
+     * @param bookId The Book object representing the book associated with this review.
+     */
+    public Review(Book bookId) {
+        this.bookId = bookId;
+    }
+
+    /**
+     * Creates a new review entity associated with a specific user.
+     *
+     * @param userId The User object representing the user who wrote this review.
+     */
+    public Review(User userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * Default constructor for creating a new Review instance.
+     */
+    public Review() {
+        // Default constructor
+    }
 }

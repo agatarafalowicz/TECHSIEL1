@@ -35,6 +35,10 @@ public class User {
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
+    public User() {
+
+    }
+
     /**
      * Get the ID of the user.
      *
@@ -142,4 +146,15 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Constructs a new User with the specified user ID.
+     *
+     * @param userId The user ID to set.
+     */
+    public User(Integer userId) {
+        this.userId = userId;
+    }
+
+
 }

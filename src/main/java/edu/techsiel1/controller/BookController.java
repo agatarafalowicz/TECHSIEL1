@@ -65,13 +65,10 @@ public class BookController {
     public ResponseEntity<?> getOne(@PathVariable Integer bookId) {
         try{
             Book book = bookService.getOne(bookId);
-            return ResponseEntity.ok(book);
+            return new ResponseEntity<>(book, HttpStatus.CREATED);
         } catch (BookNotFoundException e) {
             String errorMessage = e.getMessage();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-        } catch (IllegalArgumentException e){
-            String errorMessage = e.getMessage();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
     }
 

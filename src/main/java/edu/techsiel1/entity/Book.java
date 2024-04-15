@@ -185,4 +185,21 @@ public class Book {
     public void setLoanId(Loan loanId) {
         this.loanId = loanId;
     }
+
+
+    /**
+     * Default constructor for Book class.
+     * Initializes a new book instance.
+     */
+    public Book() {
+        // Default constructor
+    }
+
+    /**
+     * Constructor for Book class with specified book ID.
+     * @param bookId The ID of the book.
+     */
+    public Book(Integer bookId) {
+        this.bookId = bookId;
+    }
 }
