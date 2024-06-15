@@ -104,4 +104,20 @@ public class LoanService {
         }
         loanRepository.deleteById(loanId);
     }
+
+    /**
+     * Updates return date
+     *
+     * @param bookId book ID which was returned
+     * @return
+     * @throws LoanNotFoundException If loan not found
+     */
+    public Loan returnLoan(Integer bookId, Integer userId) {
+        Loan loan = (Loan) loanRepository.findByBookIdAndUserId(bookId, userId)
+                .orElseThrow(() -> new LoanNotFoundException("Loan not found for bookId: " + bookId + " and userId: " + userId));
+        loan.setReturnDate(String.valueOf(LocalDate.now()));
+        return loanRepository.save(loan);
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package edu.techsiel1.repository;
 
 import edu.techsiel1.entity.Book;
+import edu.techsiel1.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface BookRepository extends CrudRepository<Book, Integer> {
+    Book findBookByBookId(Integer bookId);
 }

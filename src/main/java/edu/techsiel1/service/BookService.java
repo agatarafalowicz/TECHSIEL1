@@ -86,4 +86,31 @@ public class BookService {
         }
         bookRepository.deleteById(bookId);
     }
+
+    /**
+     * Updates a book entity.
+     *
+     * @param book The book entity to update.
+     * @return The updated Book entity.
+     * @throws BookNotFoundException If no book with the specified ID is found.
+     */
+    public Book updateBook(Book book) {
+        if (book.getBookId() == null || book.getBookId() <= 0) {
+            throw new IllegalArgumentException("Invalid book ID. Book ID must be a positive integer.");
+        }
+        if (!bookRepository.existsById(book.getBookId())) {
+            throw new BookNotFoundException(String.format("Book with id '%s' not found", book.getBookId()));
+        }
+        return bookRepository.save(book);
+    }
+
+    public Book findBookById(Integer bookId) {
+        Optional<Book> optionalBook = bookRepository.findById(bookId);
+        if (optionalBook.isPresent()) {
+            return optionalBook.get();
+        } else {
+            throw new BookNotFoundException("Book not found with ID: " + bookId);
+        }
+    }
+
 }

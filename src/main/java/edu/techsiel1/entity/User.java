@@ -35,6 +35,7 @@ public class User {
     @Column(name = "name", unique = false, nullable = false)
     private String name;
 
+
     public User() {
 
     }

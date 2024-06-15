@@ -7,6 +7,8 @@ import edu.techsiel1.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -32,7 +34,7 @@ public class UserController {
      * Endpoint to add a new User.
      *
      * @param user The User object to be added.
-     * @return ResponseEntity containing the newly created User with a HTTP status of CREATED (201),
+     * @return ResponseEntity containing the newly created User with an HTTP status of CREATED (201),
      *         or an error response if the user already exists (CONFLICT).
      */
     @PostMapping("/add")
@@ -96,4 +98,21 @@ public class UserController {
     public Iterable<User> getAllUsers() {
         return userService.getAll();
     }
+
+    @GetMapping("/current")
+    public ResponseEntity<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String userId = authentication.getName();
+            try {
+                User user = userService.getOne(Integer.parseInt(userId));
+                return ResponseEntity.ok(user);
+            } catch (UserNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
 }

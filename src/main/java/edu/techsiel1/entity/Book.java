@@ -2,6 +2,7 @@ package edu.techsiel1.entity;
 
 import jakarta.persistence.*;
 
+
 /**
  * Represents a book entity in the library system.
  */
@@ -11,36 +12,39 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="bookId")
+    @Column(name = "bookId")
     private Integer bookId;
 
     @Basic
-    @Column(name="isbn", unique = true)
+    @Column(name = "isbn", unique = true)
     private String isbn;
 
     @Basic
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
     @Basic
-    @Column(name="author")
+    @Column(name = "author")
     private String author;
 
     @Basic
-    @Column(name="publisher")
+    @Column(name = "publisher")
     private String publisher;
 
     @Basic
-    @Column(name="yearOfPublication")
+    @Column(name = "yearOfPublication")
     private Integer yearOfPublication;
 
     @Basic
-    @Column(name="availableCopies")
+    @Column(name = "availableCopies")
     private Integer availableCopies;
 
-    @ManyToOne
-    @JoinColumn(name = "loanId")
-    private Loan loanId;
+    public Book() {
+
+    }
+
+    public Book(Integer bookId){this.bookId=bookId;}
+
 
     /**
      * Get the ID of the book.
@@ -168,38 +172,13 @@ public class Book {
         this.availableCopies = availableCopies;
     }
 
-    /**
-     * Get the loan associated with the book.
-     *
-     * @return The loan associated with the book.
-     */
-    public Loan getLoanId() {
-        return loanId;
-    }
-
-    /**
-     * Set the loan associated with the book.
-     *
-     * @param loanId The loan to associate with the book.
-     */
-    public void setLoanId(Loan loanId) {
-        this.loanId = loanId;
-    }
 
 
-    /**
-     * Default constructor for Book class.
-     * Initializes a new book instance.
-     */
-    public Book() {
-        // Default constructor
-    }
 
-    /**
-     * Constructor for Book class with specified book ID.
-     * @param bookId The ID of the book.
-     */
-    public Book(Integer bookId) {
-        this.bookId = bookId;
-    }
 }
+
+
+
+
+
+

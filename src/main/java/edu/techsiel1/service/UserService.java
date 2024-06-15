@@ -5,6 +5,7 @@ import edu.techsiel1.repository.UserRepository;
 import edu.techsiel1.service.exception.UserAlreadyExistsException;
 import edu.techsiel1.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,15 +18,18 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Constructs a UserService with the specified UserRepository.
      *
      * @param userRepository The repository used for accessing and managing users.
+     * @param passwordEncoder The password encoder used for encoding passwords securely.
      */
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -66,6 +70,8 @@ public class UserService {
         if (existingUser.isPresent()) {
             throw new UserAlreadyExistsException(String.format("User with login '%s' already exists", login));
         } else {
+            String encodedPassword = passwordEncoder.encode(user.getUserPassword());
+            user.setUserPassword(encodedPassword);
             return userRepository.save(user);
         }
     }

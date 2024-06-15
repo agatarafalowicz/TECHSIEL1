@@ -164,6 +164,7 @@ public class Review {
      * Default constructor for creating a new Review instance.
      */
     public Review() {
-        // Default constructor
     }
+
+    public Review(Integer reviewId){this.reviewId=reviewId;}
 }

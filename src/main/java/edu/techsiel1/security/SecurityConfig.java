@@ -41,6 +41,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers("/login").permitAll()
+                                .requestMatchers("/api/user/current").authenticated()
+                                .requestMatchers("api/user/add").hasRole("ADMIN")
+                                .requestMatchers("api/user/{userId}").authenticated()
                                 .requestMatchers("api/user/**").hasRole("ADMIN")
                                 .requestMatchers("api/book/add").hasRole("ADMIN")
                                 .requestMatchers("/api/**").authenticated())
